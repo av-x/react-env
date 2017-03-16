@@ -1,9 +1,13 @@
 import React from 'react';
 
-const TestComponent = function(props) {
-  return (
-    <div>I am a TestComponent</div>
-  );
-}
+export default class TestComponent extends React.Component {
+  constructor() {
+    super()
+  }
 
-export default TestComponent;
+  render() {
+    return (
+      <h1>I am a test component.</h1>
+    );
+  }
+}
