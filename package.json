@@ -4,8 +4,8 @@
   "description": "React Dev Environment",
   "main": "index.html",
   "scripts": {
-    "webpack": "./node_modules/webpack/bin/webpack.js",
-    "webpack:watch": "./node_modules/webpack/bin/webpack.js -w"
+    "start": "node_modules/.bin/webpack-dev-server --progress --colors",
+    "build": "NODE_ENV=production node_modules/.bin/webpack -p --progress --colors"
   },
   "author": "a-void",
   "license": "MIT",
@@ -18,17 +18,21 @@
     "chai": "^3.5.0",
     "chai-immutable": "^1.6.0",
     "css-loader": "^0.27.1",
-    "express": "^4.15.2",
     "extract-text-webpack-plugin": "^2.1.0",
+    "file-loader": "^0.11.2",
     "html-webpack-plugin": "^2.28.0",
-    "immutable": "^3.8.1",
     "mocha": "^3.3.0",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
     "style-loader": "^0.13.2",
     "stylus": "^0.54.5",
     "stylus-loader": "^3.0.1",
-    "webpack": "^2.2.1"
+    "url-loader": "^0.5.9",
+    "webpack": "^2.2.1",
+    "webpack-dev-server": "2.4.5"
+  },
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "immutable": "^3.8.1"
   },
   "repository": {
     "type": "git",
