@@ -1,8 +1,13 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
-import TestComponent from './components/TestComponent.jsx';
 
-class HelloWorld extends React.Component {
+// Components
+import TestComponent from './components/TestComponent';
+
+// Stylesheets
+import './index.styl';
+
+class HelloWorld extends Component {
   render() {
     return (
       <div>
