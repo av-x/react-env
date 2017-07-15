@@ -10,19 +10,29 @@ var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: 'body'
 });
 
-// loader for .styl files
-var stylusLoader = ExtractTextPlugin.extract({
-  fallback: 'style-loader',
-  use: 'css-loader!stylus-loader'
-});
+// css-loader modules config
+var cssLoaderConfig = {
+  loader: 'css-loader',
+  options: {
+    modules: true,
+    importLoaders: 1,
+    localIdentName: '[local]__[hash:base64:5]'
+  }
+};
 
 var isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
-  entry: path.resolve(__dirname, 'src/index.js'),
+  entry: {
+    app: path.resolve(__dirname, 'src/index.js'),
+    vendor: [
+      'react',
+      'react-dom'
+    ]
+  },
   output: {
-    filename: 'bundle.js',
-    path: path.join(__dirname, 'dist')
+    filename: '[name].js',
+    path: path.join(__dirname, 'build')
   },
   module: {
     loaders: [
@@ -32,9 +42,11 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.styl$/,
-        exclude: /node_modules/,
-        loader: stylusLoader
+        test: /\.css$/,
+        loader: isProduction ? ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          use: [cssLoaderConfig, 'postcss-loader']
+        }) : ['style-loader', cssLoaderConfig, 'postcss-loader']
       },
       {
         test: /\.(eot|woff|woff2|ttf|svg)$/,
@@ -44,22 +56,22 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css', '.styl']
+    extensions: ['.js', '.jsx', '.css']
   },
   devServer: {
-    contentBase: './dist',
+    contentBase: path.join(__dirname, 'build'),
     historyApiFallback: true,
     inline: true
   },
   plugins: isProduction ? [
     HTMLWebpackPluginConfig,
-    new ExtractTextPlugin('app.css'),
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
+    new ExtractTextPlugin({filename:'app.css', disable: false, allChunks: true}),
     new webpack.optimize.UglifyJsPlugin({comments: false}),
-    new webpack.DefinePlugin({
-      'process.env': {NODE_ENV: JSON.stringify('production')}
-    })
+    new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}})
   ] : [
     HTMLWebpackPluginConfig,
-    new ExtractTextPlugin('app.css')
+    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
+    new ExtractTextPlugin({filename:'app.css', disable: false, allChunks: true}),
   ]
 };
