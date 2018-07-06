@@ -27,7 +27,11 @@ module.exports = {
     app: path.resolve(__dirname, 'src/app.js'),
     vendor: [
       'react',
-      'react-dom'
+      'react-dom',
+      'react-redux',
+      'redux',
+      'redux-thunk',
+      'classnames',
     ]
   },
   output: {
