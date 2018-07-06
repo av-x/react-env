@@ -1,13 +1,12 @@
 import React from 'react';
 
-export default class TestComponent extends React.Component {
-  constructor() {
-    super()
-  }
+import styles from '../styles.css';
 
+export default class TestComponent extends React.Component {
   render() {
     return (
-      <h1>I am a test component.</h1>
+      <h1 className={styles.alert}>I am a test component.</h1>
     );
   }
 }
+

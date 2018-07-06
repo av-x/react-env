@@ -24,7 +24,7 @@ var isProduction = process.env.NODE_ENV === 'production';
 
 module.exports = {
   entry: {
-    app: path.resolve(__dirname, 'src/index.js'),
+    app: path.resolve(__dirname, 'src/app.js'),
     vendor: [
       'react',
       'react-dom'
@@ -32,7 +32,7 @@ module.exports = {
   },
   output: {
     filename: '[name].js',
-    path: path.join(__dirname, 'build')
+    path: path.join(__dirname, 'dist')
   },
   module: {
     loaders: [
@@ -42,10 +42,10 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.css$/,
+        test: /\.css?$/,
         loader: isProduction ? ExtractTextPlugin.extract({
           fallback: 'style-loader',
-          use: [cssLoaderConfig, 'postcss-loader']
+          use: [cssLoaderConfig, { loader: 'postcss-loader' }]
         }) : ['style-loader', cssLoaderConfig, 'postcss-loader']
       },
       {
@@ -59,7 +59,7 @@ module.exports = {
     extensions: ['.js', '.jsx', '.css']
   },
   devServer: {
-    contentBase: path.join(__dirname, 'build'),
+    contentBase: path.join(__dirname, 'dist'),
     historyApiFallback: true,
     inline: true
   },
