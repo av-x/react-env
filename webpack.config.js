@@ -2,6 +2,7 @@ var path = require('path');
 var webpack = require('webpack');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var isProduction = process.env.NODE_ENV === 'production';
 
 // injects bundle.js into the index.html file
 var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -10,18 +11,6 @@ var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   inject: 'body'
 });
 
-// css-loader modules config
-var cssLoaderConfig = {
-  loader: 'css-loader',
-  options: {
-    modules: true,
-    importLoaders: 1,
-    localIdentName: '[local]__[hash:base64:5]'
-  }
-};
-
-var isProduction = process.env.NODE_ENV === 'production';
-
 module.exports = {
   entry: {
     app: path.resolve(__dirname, 'src/app.js'),
@@ -29,6 +18,8 @@ module.exports = {
       'react',
       'react-dom',
       'react-redux',
+      'react-router',
+      'react-router-dom',
       'redux',
       'redux-thunk',
       'classnames',
@@ -46,13 +37,6 @@ module.exports = {
         loader: 'babel-loader'
       },
       {
-        test: /\.css?$/,
-        loader: isProduction ? ExtractTextPlugin.extract({
-          fallback: 'style-loader',
-          use: [cssLoaderConfig, { loader: 'postcss-loader' }]
-        }) : ['style-loader', cssLoaderConfig, 'postcss-loader']
-      },
-      {
         test: /\.(eot|woff|woff2|ttf|svg)$/,
         exclude: /node_modules/,
         loader: 'url-loader?limit=10000'
@@ -60,7 +44,8 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.js', '.jsx', '.css']
+    modules: ['src', 'node_modules'],
+    extensions: ['.js', '.jsx']
   },
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
@@ -70,12 +55,10 @@ module.exports = {
   plugins: isProduction ? [
     HTMLWebpackPluginConfig,
     new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
-    new ExtractTextPlugin({filename:'app.css', disable: false, allChunks: true}),
     new webpack.optimize.UglifyJsPlugin({comments: false}),
     new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}})
   ] : [
     HTMLWebpackPluginConfig,
     new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
-    new ExtractTextPlugin({filename:'app.css', disable: false, allChunks: true}),
   ]
 };
