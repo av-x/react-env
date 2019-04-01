@@ -28,6 +28,7 @@ export default class Login extends Component {
     const { name, password } = this.state;
     const { Auth } = this.props;
 
+
     return Auth.login(name, password);
   }
 

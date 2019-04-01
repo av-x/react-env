@@ -12,9 +12,11 @@ import * as reducers from './reducers';
 
 // Log state changes when in dev mode
 const logger = (store) => (dispatch) => (action) => {
-  const result = dispatch(action);
-  console.info('[state] %s %o', action.type, store.getState());
-  return result;
+  if (process.env.NODE_ENV !== 'production') {
+    const result = dispatch(action);
+    console.info('%c[state] %s %o', 'color: #2866b5', action.type, store.getState());
+    return result;
+  }
 
   return dispatch(action);
 }

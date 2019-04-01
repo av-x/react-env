@@ -1,9 +1,8 @@
 const chalk = require('chalk');
-const isProduction = process.env.NODE_ENV === 'production';
 
 const ENV = {
-  NODE_ENV: 'production',
-  API_URL: 'http://localhost:3000',
+  NODE_ENV: process.env.NODE_ENV || 'development',
+  API_URL: 'https://s3.amazonaws.com',
   API_TIMEOUT: 10000,
 };
 console.log(chalk.red('============ CURRENT CONFIG ============'));

@@ -18,6 +18,7 @@ var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
 });
 
 module.exports = {
+  mode: isProduction ? 'production' : 'development',
   entry: {
     app: path.resolve(__dirname, 'src/app.js'),
     vendor: [
@@ -93,14 +94,14 @@ module.exports = {
   },
   plugins: [
     HTMLWebpackPluginConfig,
+    new webpack.DefinePlugin({ 'process.env': JSON.stringify(publicEnv) }),
   ].concat(isProduction
     ? [
-      new CleanWebpackPlugin(BUILD_PATH, { allowExternal: true, verbose: false }),
+      new CleanWebpackPlugin({ verbose: false }),
       new MiniCssExtractPlugin({
         filename: 'static/css/[name].[contenthash].css',
       }),
       new webpack.HashedModuleIdsPlugin(),
-      new webpack.DefinePlugin({ 'process.env': publicEnv }),
     ]
     : [new webpack.HotModuleReplacementPlugin()]
   ),
