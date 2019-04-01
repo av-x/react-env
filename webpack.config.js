@@ -1,8 +1,14 @@
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
-var isProduction = process.env.NODE_ENV === 'production';
+const path = require('path');
+const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CleanWebpackPlugin = require('clean-webpack-plugin');
+
+const publicEnv = require('./config');
+const isProduction = process.env.NODE_ENV === 'production';
 
 // injects bundle.js into the index.html file
 var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
@@ -23,14 +29,14 @@ module.exports = {
       'redux',
       'redux-thunk',
       'classnames',
-    ]
+    ],
   },
   output: {
     filename: '[name].js',
     path: path.join(__dirname, 'dist')
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
@@ -50,15 +56,52 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'dist'),
     historyApiFallback: true,
-    inline: true
+    inline: true,
+    hot: true,
+    open: false,
   },
-  plugins: isProduction ? [
+  optimization: {
+    minimizer: [
+      // uglify is default and built-in, but currently having issues
+      new TerserPlugin({
+        sourceMap: true, // for sentry error handling
+      }),
+      new OptimizeCssAssetsPlugin({}),
+    ],
+    splitChunks: {
+      chunks: 'async',
+      minSize: 30000,
+      maxSize: 0,
+      minChunks: 1,
+      maxAsyncRequests: 5,
+      maxInitialRequests: 3,
+      automaticNameDelimiter: '~',
+      name: true,
+      cacheGroups: {
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendor',
+          chunks: 'all',
+        },
+        default: {
+          minChunks: 2,
+          priority: -20,
+          reuseExistingChunk: true
+        }
+      }
+    },
+  },
+  plugins: [
     HTMLWebpackPluginConfig,
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
-    new webpack.optimize.UglifyJsPlugin({comments: false}),
-    new webpack.DefinePlugin({'process.env': {NODE_ENV: JSON.stringify('production')}})
-  ] : [
-    HTMLWebpackPluginConfig,
-    new webpack.optimize.CommonsChunkPlugin({name: 'vendor'}),
-  ]
+  ].concat(isProduction
+    ? [
+      new CleanWebpackPlugin(BUILD_PATH, { allowExternal: true, verbose: false }),
+      new MiniCssExtractPlugin({
+        filename: 'static/css/[name].[contenthash].css',
+      }),
+      new webpack.HashedModuleIdsPlugin(),
+      new webpack.DefinePlugin({ 'process.env': publicEnv }),
+    ]
+    : [new webpack.HotModuleReplacementPlugin()]
+  ),
 };
