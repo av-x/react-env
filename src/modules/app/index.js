@@ -2,11 +2,14 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 
+import { injectGlobalStyles } from 'decorators';
+
+@injectGlobalStyles()
 export default class App extends Component {
   render() {
     return (
       <Main>
-        <h1>Home View</h1>
+        <h1>Home</h1>
       </Main>
     );
   }
@@ -23,6 +26,7 @@ const Main = styled.main`
     font-size: 70px;
     font-weight: 100;
     color: #ff9b23;
+    margin: 0;
     margin-bottom: 25px;
   }
 `;
