@@ -12,9 +12,7 @@ describe('Actions: Auth', () => {
   });
 
   test('login() - 200', () => {
-    console.log('----------> ', process.env.API_URL);
-    fetchMock
-      .getOnce('https://api.pwportfolioanalytics.com/v1/accounts/', { status: 200 });
+    fetchMock.getOnce('http://localhost:3333/login', { status: 200 });
 
     const expectedActions = [
       { type: Auth.AUTH_REQUEST },

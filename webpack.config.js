@@ -1,3 +1,4 @@
+const chalk = require('chalk');
 const path = require('path');
 const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
@@ -15,6 +16,10 @@ var HTMLWebpackPluginConfig = new HtmlWebpackPlugin({
   filename: 'index.html',
   inject: 'body'
 });
+
+console.log(chalk.red('============ CURRENT CONFIG ============'));
+console.log(publicEnv);
+console.log(chalk.red('========================================'));
 
 module.exports = {
   mode: isProduction ? 'production' : 'development',
