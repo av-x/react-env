@@ -10,7 +10,7 @@ export function login() {
   return (dispatch) => {
     dispatch({ type: AUTH_REQUEST });
 
-    return api.request('get', `${process.env.API_URL}/avexpense/user-data.json`).then(
+    return api.request('get', '/login').then(
       (data) => {
         dispatch({ type: AUTH_USER_RECEIVE, user: data });
       },

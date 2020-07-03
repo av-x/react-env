@@ -2,9 +2,13 @@
  * Http wrapper
  */
 class Api {
+  constructor({ host }) {
+    this.host = host;
+  }
+
   request(method, url, options = {}) {
     const req = {
-      url,
+      url: `${this.host}${url}`,
       method,
       headers: {
         'Accept': 'application/json',
@@ -38,5 +42,5 @@ class Api {
   }
 }
 
-export default new Api();
+export default new Api({ host: process.env.API_URL });
 
