@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "strict": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "commonjs", // commonjs
+    "removeComments": true,
+    "jsx": "react",
+    "baseUrl": "./",
+    "useDefineForClassFields": true,
+    "noImplicitAny": false,
+    "resolveJsonModule": true,
+    "moduleResolution": "node",
+    "downlevelIteration": true
+  },
+  "include": [
+    "./src",
+    "./webpack.config.ts"
+  ]
+}
